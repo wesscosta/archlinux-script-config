@@ -24,11 +24,11 @@ Testado na configuração abaixo; em hardware diferente, revise `pacotes/nvidia.
 ```
 pacotes/          listas curadas por categoria: base, kde, nvidia, dev e aur
 sistema/          arquivos instalados em / (espelha o caminho real)
-  etc/pacman.d/hooks/   00-boot-montado.hook, zz-verificar-kernels.hook
-  usr/local/bin/        checar-boot-montado, verificar-kernels-boot
+  etc/pacman.d/hooks/   00-boot-montado.hook, zz-verificar-kernels.hook, zz-verificar-grub.hook
+  usr/local/bin/        checar-boot-montado, verificar-kernels-boot, verificar-grub-efi
   etc/…                 pacman.conf, mkinitcpio.conf, default/grub, sddm.conf.d, zram
 home/             arquivos instalados em ~ (zsh, makepkg.conf, Konsole, VS Code)
-scripts/          post-install, instalar-*, coletar, backup/restaurar, limpeza, btrfs-espaco, docker-subvolume, setup-gaming
+scripts/          post-install, instalar-*, coletar, backup/restaurar, limpeza, btrfs-espaco, docker-subvolume, reparar-grub, setup-gaming
 lib/comum.sh      funções compartilhadas (confirmação, checagem de /boot)
 docs/             runbooks e registro de incidentes
 wallpapers/
@@ -71,6 +71,7 @@ faz sentido para quem usa um setup parecido.
 | `update` (função `atualizar` do zsh) | confere `/boot`, `yay -Syu`, confere kernels                 |
 | `./scripts/limpeza.sh`               | órfãos, `-debug`, paccache, journal, caches (pede confirmação) |
 | `sudo ./scripts/btrfs-espaco.sh`     | diagnóstico de espaço e snapshots (só leitura)               |
+| `sudo ./scripts/reparar-grub.sh`     | reinstala o GRUB na EFI (boot parando no prompt do GRUB)     |
 | `./scripts/backup.sh`                | pacotes + configs em `~/backups/arch` (fora do repo)         |
 | `./scripts/restaurar.sh <dir>`       | restaura um backup                                           |
 
@@ -79,6 +80,8 @@ faz sentido para quem usa um setup parecido.
 - **EFI desmontada:** o hook `00-boot-montado.hook` aborta qualquer transação do pacman se `/boot`
   não estiver montado. Depois de mexer em kernels, o `zz-verificar-kernels.hook` avisa se algum
   ficou sem vmlinuz, initramfs ou preset.
+- **GRUB fora da EFI:** o `zz-verificar-grub.hook` avisa se algum GRUB instalado na EFI procura seus
+  arquivos dentro do Btrfs, o que faz o boot parar no prompt do GRUB.
 - **Pacotes `-debug`:** `~/.config/pacman/makepkg.conf` com `!debug`.
 - **Tela de login:** SDDM só com o Breeze ([docs/kde-plasma.md](docs/kde-plasma.md)).
 - **Snapshots enxutos:** Docker em `@docker`, fora dos snapshots de `/`.

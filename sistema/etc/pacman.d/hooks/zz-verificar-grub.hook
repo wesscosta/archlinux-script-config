@@ -1,0 +1,19 @@
+# Depois de atualizar o GRUB ou mexer em /boot, avisa se algum GRUB da EFI
+# procura seus arquivos fora da EFI (causa do boot parando no prompt do GRUB).
+[Trigger]
+Operation = Install
+Operation = Upgrade
+Type = Package
+Target = grub
+
+[Trigger]
+Operation = Install
+Operation = Upgrade
+Operation = Remove
+Type = Path
+Target = boot/*
+
+[Action]
+Description = Verificando o GRUB na EFI...
+When = PostTransaction
+Exec = /usr/local/bin/verificar-grub-efi
