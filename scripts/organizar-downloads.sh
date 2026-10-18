@@ -36,7 +36,7 @@ for tipo in DOCUMENTS PICTURES VIDEOS MUSIC; do
         DOCUMENTS) esperado="$HOME/Documentos" ;;
         PICTURES)  esperado="$HOME/Imagens" ;;
         VIDEOS)    esperado="$HOME/Vídeos" ;;
-        MUSIC)     esperado="$HOME/Música" ;;
+        MUSIC)     esperado="$HOME/Músicas" ;;
     esac
     [[ -z $dir || $dir == "$esperado" ]] || aviso "XDG $tipo é $dir, mas as regras usam $esperado. Ajuste $REGRAS."
 done
