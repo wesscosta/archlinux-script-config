@@ -23,7 +23,7 @@ eh_sensivel() {
 mudou_grub=0
 mudou_mkinitcpio=0
 
-while IFS= read -r -d '' arq; do
+while IFS= read -r -d '' -u 3 arq; do
     rel="${arq#"$ORIGEM"/}"
     dest="/$rel"
 
@@ -48,7 +48,7 @@ while IFS= read -r -d '' arq; do
 
     [[ $rel == etc/default/grub ]] && mudou_grub=1
     [[ $rel == etc/mkinitcpio.conf ]] && mudou_mkinitcpio=1
-done < <(find "$ORIGEM" -type f -print0 | sort -z)
+done 3< <(find "$ORIGEM" -type f -print0 | sort -z)
 
 if (( mudou_mkinitcpio )); then
     exigir_boot_montado
