@@ -1,77 +1,95 @@
-# Script de Pós-Instalação do Arch Linux
+# archlinux-script-config
 
-Este script automatiza a pós-instalação do Arch Linux, configurando o sistema para um uso otimizado em uma máquina **Asus TUF F15** com **KDE Plasma** e **Zsh**. Ele instala pacotes essenciais, configura o `pacman`, otimiza os mirrors com `Reflector` e instala pacotes do AUR via `yay`.
+Configuração otimizada de Arch Linux com KDE Plasma, baseada na minha experiência de uso diário
+num notebook Intel + NVIDIA. Use como ponto de partida: listas de pacotes curadas, arquivos de
+configuração comentados, scripts de pós-instalação e manutenção, e runbooks para quando algo quebra.
 
-## Recursos do Script
+Testado na configuração abaixo; em hardware diferente, revise `pacotes/nvidia.txt` e
+`sistema/etc/default/grub` antes de usar.
 
-- **Atualização do Sistema**
-- **Otimiza os mirrors com Reflector** (selecionando os mais rápidos e recentes)
-- **Configura o ****`pacman.conf`**:
-  - Habilita cores no terminal (`Color`)
-  - Ativa downloads simultâneos (`ParallelDownloads = 10`)
-  - Aplica personalização visual (`ILoveCandy`)
-- **Instala pacotes essenciais**:
-  - KDE Plasma e aplicativos
-  - Drivers NVIDIA
-  - Ferramentas de desenvolvimento (Node.js, Python, Docker, React Native CLI)
-  - Steam e Lutris para jogos
-- **Configuração do Zsh**:
-  - Instala Oh My Zsh e plugins (`zsh-syntax-highlighting` e `zsh-autosuggestions`)
-- **Instala o ****`yay`**** (AUR Helper)**
-- **Instala pacotes do AUR**: Google Chrome, VS Code, Spotify, Postman, Discord, entre outros
-- **Adiciona o usuário ao grupo ****`docker`** para permissão de execução sem `sudo`
+| Item          | Configuração                                                       |
+|---------------|--------------------------------------------------------------------|
+| Testado em    | ASUS TUF F15 (Intel, RTX 4050, NVIDIA PRIME)                       |
+| Desktop       | KDE Plasma 6 (Wayland) + SDDM com tema Breeze                      |
+| Kernels       | `linux-zen` (principal), `linux-lts` (fallback), `linux`           |
+| GPU           | `nvidia-open-dkms`, `nvidia-prime`                                 |
+| Disco         | Btrfs (`@`, `@home`, `@.snapshots`, `@pkg`, `@log`, `@docker`) + EFI em `/boot` |
+| Boot          | GRUB + `grub-btrfs`                                                |
+| Snapshots     | Snapper + `snap-pac`                                               |
+| Shell         | zsh + Oh My Zsh                                                    |
+| AUR           | yay                                                                |
 
----
-
-## Como Usar
-
-1. Clone este repositório e acesse o diretório:
-   ```sh
-   git clone https://github.com/wesscosta/script-config-archlinux.git
-   cd seu-repositorio
-   ```
-2. Torne o script executável:
-   ```sh
-   chmod +x post-install.sh
-   ```
-3. Execute o script:
-   ```sh
-   ./post-install.sh
-   ```
-
----
-
-## Lista de Pacotes Instalados
-
-### Pacotes Oficiais (Pacman)
+## Estrutura
 
 ```
-base-devel git wget curl vim zsh nodejs npm python docker steam lutris
-nvidia nvidia-utils nvidia-settings sddm plasma-meta kde-applications-meta reflector
+pacotes/          listas curadas por categoria: base, kde, nvidia, dev e aur
+sistema/          arquivos instalados em / (espelha o caminho real)
+  etc/pacman.d/hooks/   00-boot-montado.hook, zz-verificar-kernels.hook
+  usr/local/bin/        checar-boot-montado, verificar-kernels-boot
+  etc/…                 pacman.conf, mkinitcpio.conf, default/grub, sddm.conf.d, zram
+home/             arquivos instalados em ~ (zsh, makepkg.conf, Konsole, VS Code)
+scripts/          post-install, instalar-*, coletar, backup/restaurar, limpeza, btrfs-espaco, docker-subvolume, setup-gaming
+lib/comum.sh      funções compartilhadas (confirmação, checagem de /boot)
+docs/             runbooks e registro de incidentes
+wallpapers/
 ```
 
-### Pacotes do AUR (Yay)
+## Uso
 
+### Instalação nova
+
+Depois do `pacstrap` + GRUB, com o layout de subvolumes acima e `/boot` sendo a EFI:
+
+```sh
+git clone https://github.com/wesscosta/archlinux-script-config.git
+cd archlinux-script-config
+./scripts/post-install.sh       # base kde nvidia (padrão); acrescente 'dev' para desenvolvimento
+./scripts/post-install.sh base kde nvidia dev
+./scripts/setup-gaming.sh       # opcional
 ```
-visual-studio-code-bin google-chrome spotify postman-bin insomnia slack-desktop discord
-zoom teams notion-app obs-studio android-studio react-native-cli
+
+### Aplicar só as configurações
+
+```sh
+sudo ./scripts/instalar-sistema.sh   # sistema/ -> /    (mostra diff e pergunta antes de sobrescrever)
+./scripts/instalar-home.sh           # home/    -> ~
 ```
 
----
+### Trazer mudanças da máquina para o repositório
 
-## Personalização e Modificações
+```sh
+./scripts/coletar.sh && git diff   # atualiza os arquivos versionados e lista pacotes fora das listas
+```
 
-Caso deseje modificar os pacotes ou configurações, edite o arquivo `post-install.sh` antes da execução.
+As listas de `pacotes/` são recomendações, não uma cópia de tudo que está instalado: inclua só o que
+faz sentido para quem usa um setup parecido.
 
----
+### Manutenção
 
-## Reinicialização Automática
+| Comando                              | O que faz                                                    |
+|--------------------------------------|--------------------------------------------------------------|
+| `update` (função `atualizar` do zsh) | confere `/boot`, `yay -Syu`, confere kernels                 |
+| `./scripts/limpeza.sh`               | órfãos, `-debug`, paccache, journal, caches (pede confirmação) |
+| `sudo ./scripts/btrfs-espaco.sh`     | diagnóstico de espaço e snapshots (só leitura)               |
+| `./scripts/backup.sh`                | pacotes + configs em `~/backups/arch` (fora do repo)         |
+| `./scripts/restaurar.sh <dir>`       | restaura um backup                                           |
 
-O script finaliza a execução com um **reboot automático** após 5 segundos. Caso não queira reiniciar imediatamente, comente a linha final do script.
+## Proteções
 
----
+- **EFI desmontada:** o hook `00-boot-montado.hook` aborta qualquer transação do pacman se `/boot`
+  não estiver montado. Depois de mexer em kernels, o `zz-verificar-kernels.hook` avisa se algum
+  ficou sem vmlinuz, initramfs ou preset.
+- **Pacotes `-debug`:** `~/.config/pacman/makepkg.conf` com `!debug`.
+- **Tela de login:** SDDM só com o Breeze ([docs/kde-plasma.md](docs/kde-plasma.md)).
+- **Snapshots enxutos:** Docker em `@docker`, fora dos snapshots de `/`.
 
-## Autor
+## Documentação
 
-Desenvolvido por Weslley Costa. Contribuições são bem-vindas!
+- [Recuperação via chroot](docs/recuperacao-chroot.md)
+- [Btrfs, Snapper e espaço em disco](docs/btrfs-snapper.md)
+- [KDE Plasma e SDDM](docs/kde-plasma.md)
+- [Incidente de 18/10/2026](docs/incidentes/2026-10-18.md)
 
+## Licença
+
+MIT. Veja [LICENSE](LICENSE).

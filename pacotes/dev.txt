@@ -1,0 +1,18 @@
+# Desenvolvimento: containers, linguagens, bancos e virtualização
+docker
+docker-buildx
+docker-compose
+nodejs
+npm
+pnpm
+python-pip
+python-pipx
+rustup
+jdk21-openjdk
+maven
+cmake
+postgresql
+dbeaver
+libvirt
+virt-manager
+dnsmasq

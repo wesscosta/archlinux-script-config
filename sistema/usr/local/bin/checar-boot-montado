@@ -1,0 +1,9 @@
+#!/bin/sh
+# Chamado pelo hook 00-boot-montado.hook antes de toda transação do pacman.
+# Se a ESP não estiver montada, kernels e initramfs seriam gravados no /boot
+# vazio do subvolume @ e sumiriam da EFI (incidente de 18/10/2026).
+if ! findmnt -n -M /boot -t vfat >/dev/null 2>&1; then
+    echo "ERRO: /boot (partição EFI) não está montado." >&2
+    echo "      Monte com 'mount /boot' (ou 'mount -a' dentro do chroot) e repita." >&2
+    exit 1
+fi

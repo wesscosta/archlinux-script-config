@@ -1,0 +1,19 @@
+# KDE Plasma 6 (Wayland) enxuto + SDDM. Sem plasma-meta/kde-applications-meta.
+plasma-desktop
+plasma-nm
+plasma-pa
+kdeplasma-addons
+sddm
+sddm-kcm
+konsole
+dolphin
+kate
+ark
+gwenview
+okular
+spectacle
+kdeconnect
+print-manager
+breeze-plymouth
+plymouth-kcm
+ttf-meslo-nerd

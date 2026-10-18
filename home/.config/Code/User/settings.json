@@ -1,0 +1,283 @@
+{
+  // Terminal
+  "terminal.integrated.tabs.location": "right",
+  "terminal.integrated.fontFamily": "monospace",
+  "terminal.integrated.fontWeight": "normal",
+  "terminal.integrated.fontSize": 15,
+  "terminal.integrated.gpuAcceleration": "auto",
+  "terminal.integrated.showExitAlert": false,
+  "terminal.integrated.enablePersistentSessions": false,
+
+  // Terminal profiles por SO
+  "terminal.integrated.defaultProfile.linux": "zsh",
+
+  "terminal.integrated.defaultProfile.windows": "PowerShell",
+  "terminal.integrated.profiles.windows": {
+    "PowerShell": {
+      "source": "PowerShell",
+      "icon": "terminal-powershell"
+    },
+    "Git Bash": {
+      "path": "C:\\Program Files\\Git\\bin\\bash.exe",
+      "args": ["-l"],
+      "icon": "terminal-bash"
+    },
+    "WSL": {
+      "source": "wsl",
+      "icon": "terminal-linux"
+    }
+  },
+
+  // Editor - sugestões e comportamento
+  "editor.quickSuggestions": {
+    "comments": "on",
+    "strings": "on",
+    "other": "on"
+  },
+  "editor.suggestSelection": "first",
+  "editor.inlineSuggest.enabled": true,
+  "editor.acceptSuggestionOnCommitCharacter": false,
+  "editor.parameterHints.enabled": true,
+
+  // Editor - visual
+  "editor.mouseWheelZoom": false,
+  "editor.mouseWheelScrollSensitivity": 5,
+  "editor.cursorBlinking": "phase",
+  "editor.lineHeight": 24,
+  "editor.fontSize": 15,
+  "editor.fontFamily": "JetBrains Mono, Fira Code",
+  "editor.fontLigatures": true,
+  "editor.letterSpacing": 0.4,
+  "editor.minimap.enabled": false,
+  "editor.stickyScroll.enabled": false,
+  "editor.renderLineHighlight": "line",
+  "editor.rulers": [80, 120],
+
+  // Whitespace e controle
+  "editor.renderWhitespace": "boundary",
+  "editor.renderFinalNewline": "on",
+  "editor.trimAutoWhitespace": true,
+  "editor.renderControlCharacters": true,
+  "editor.wordWrap": "on",
+
+  // Brackets
+  "editor.bracketPairColorization.enabled": true,
+  "editor.guides.bracketPairs": true,
+
+  // Acessibilidade e highlighting
+  "editor.accessibilitySupport": "off",
+  "editor.semanticHighlighting.enabled": true,
+
+  // Formatação e ações ao salvar
+  "editor.formatOnType": false,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+
+  // Explorer
+  "explorer.confirmDragAndDrop": false,
+  "explorer.confirmDelete": false,
+  "explorer.compactFolders": false,
+
+  // Workbench
+  "workbench.productIconTheme": "fluent-icons",
+  "workbench.startupEditor": "newUntitledFile",
+  "workbench.editor.labelFormat": "short",
+  "workbench.editor.empty.hint": "hidden",
+  "workbench.tree.indent": 12,
+  "window.menuBarVisibility": "toggle",
+  "workbench.colorTheme": "Ayu Mirage Bordered",
+  "workbench.iconTheme": "material-icon-theme",
+  "workbench.editor.autoLockGroups": {
+    "workbench.editorinputs.searchEditorInput": true
+  },
+
+  // Associações de editor
+  "workbench.editorAssociations": {
+    "*.ipynb": "jupyter-notebook"
+  },
+
+  // Customização de cores para brackets
+  "workbench.colorCustomizations": {
+    "editorBracketHighlight.foreground1": "#ffb86c",
+    "editorBracketHighlight.foreground2": "#8be9fd",
+    "editorBracketHighlight.foreground3": "#bd93f9",
+    "editorBracketHighlight.foreground4": "#50fa7b",
+    "editorBracketHighlight.foreground5": "#f1fa8c",
+    "editorBracketHighlight.foreground6": "#abb2c0",
+    "editorBracketHighlight.unexpectedBracket.foreground": "#ff5555"
+  },
+
+  // Material icon theme
+  "material-icon-theme.folders.associations": {
+    "infra": "app",
+    "entities": "class",
+    "schemas": "class",
+    "typeorm": "database",
+    "repositories": "mappings",
+    "http": "container",
+    "migrations": "tools",
+    "modules": "components",
+    "implementations": "core",
+    "dtos": "typescript",
+    "fakes": "mock",
+    "websockets": "pipe",
+    "grpc": "pipe",
+    "actions": "tools",
+    "store": "middleware",
+    "reducers": "Redux-reducer",
+    "channels": "contract",
+    "priv": "private",
+    "web": "public",
+    "gettext": "i18n",
+    "repo": "database",
+    "support": "project",
+    "navigations": "routes",
+    "navigation": "routes"
+  },
+  "material-icon-theme.files.associations": {
+    "ormconfig.json": "database",
+    "tsconfig.json": "tune",
+    "*.webpack.js": "webpack",
+    "*.routes.tsx": "routing",
+    "*.navigation.tsx": "routing"
+  },
+
+  // Exclusões de arquivos
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "node_modules": true,
+    ".next": true,
+    ".expo": true,
+    ".expo-shared": true,
+    ".venv/**": true,
+    "_build": true,
+    "deps": true,
+    "**/__pycache__": true
+  },
+
+  // Associações de linguagem
+  "files.associations": {
+    "**/*.html": "html",
+    "**/templates/**/*.html": "django-html",
+    "**/templates/**/*": "django-txt",
+    "**/requirements{/**,*}.{txt,in}": "pip-requirements",
+    ".stylelintrc": "json",
+    ".prettierrc": "json"
+  },
+  "emmet.syntaxProfiles": {
+    "django-html": "html"
+  },
+
+  // Git
+  "git.autofetch": true,
+  "gitlens.advanced.messages": {
+    "suppressLineUncommittedWarning": true
+  },
+
+  // JS/TS refactor friendly
+  "javascript.updateImportsOnFileMove.enabled": "prompt",
+  "typescript.updateImportsOnFileMove.enabled": "prompt",
+  "typescript.suggest.autoImports": true,
+  "typescript.tsserver.log": "off",
+
+  // ESLint
+  "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"],
+
+  // Formatters por linguagem
+  "[typescriptreact]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascript]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[yaml]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
+
+  // Python (venv por projeto + Ruff)
+  "python.analysis.autoImportCompletions": true,
+  "python.venvPath": ".",
+  "python.createEnvironment.trigger": "off",
+  "[python]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "charliermarsh.ruff"
+  },
+  "ruff.lint.run": "onSave",
+
+  // Jupyter / notebooks
+  "jupyter.askForKernelRestart": false,
+  "notebook.lineNumbers": "on",
+  "notebook.cellToolbarLocation": {
+    "default": "right",
+    "jupyter-notebook": "right"
+  },
+
+  // Spell checker
+  "cSpell.language": "pt_BR,en-US",
+  "cSpell.ignoreWords": [
+    "Firestore",
+    "Ionicons",
+    "Pressable",
+    "Transportta",
+    "cobli",
+    "herbie",
+    "motify"
+  ],
+
+  // Docker
+  "docker.containers.sortBy": "CreatedTime",
+  "docker.containers.description": ["ContainerName", "Status"],
+
+  // Screencast
+  "screencastMode.fontSize": 24,
+  "screencastMode.onlyKeyboardShortcuts": true,
+
+  // Arquivos
+  "files.eol": "\n",
+  "files.insertFinalNewline": true,
+  "files.autoSave": "afterDelay",
+
+  // Live Server
+  "liveServer.settings.donotShowInfoMsg": true,
+
+  // Markdown preview enhanced
+  "markdown-preview-enhanced.previewTheme": "atom-dark.css",
+
+  // Segurança
+  "security.workspace.trust.untrustedFiles": "prompt",
+
+  // Sync
+  "sync.autoDownload": true,
+  "sync.autoUpload": true,
+  "sync.quietSync": true,
+
+  // Outros
+  "extensions.ignoreRecommendations": true,
+  "chat.commandCenter.enabled": false,
+  "editor.dropIntoEditor.preferences": [],
+  "python.defaultInterpreterPath": "/usr/bin/python3",
+  "python.languageServer": "None",
+  "docker.extension.enableComposeLanguageServer": false,
+  "chat.viewSessions.orientation": "stacked",
+  "stripe.enableIntegrationGuides": true
+}
