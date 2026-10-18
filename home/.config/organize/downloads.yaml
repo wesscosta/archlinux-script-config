@@ -1,0 +1,78 @@
+# Organização periódica de ~/Downloads (organize v3). Docs: https://organize.readthedocs.io
+#
+# Princípios:
+#   - Nada é apagado de verdade: o que sai vai para a lixeira (trash). Esvazie quando quiser.
+#   - Arquivos recentes não são tocados (podem estar em uso ou ainda baixando).
+#   - Só o primeiro nível de ~/Downloads; subpastas ficam como estão.
+#   - Em conflito de nome no destino, o arquivo novo ganha sufixo; nada é sobrescrito.
+#
+# Teste sempre antes:  organize sim ~/.config/organize/downloads.yaml
+# Ordem importa: cada arquivo é tratado pela primeira regra que o mover/descartar.
+
+rules:
+  - name: Downloads incompletos ou temporários antigos
+    locations: &downloads ~/Downloads
+    filters:
+      - extension: [part, crdownload, download, tmp, partial]
+      - lastmodified: &velho7 {days: 7, mode: older}
+    actions:
+      - echo: "lixeira (incompleto): {path.name}"
+      - trash
+
+  - name: Duplicados (mantém o mais antigo)
+    locations: *downloads
+    filters:
+      - lastmodified: {days: 1, mode: older}
+      - duplicate: {detect_original_by: created}
+    actions:
+      - echo: "lixeira (duplicado de {duplicate.original.name}): {path.name}"
+      - trash
+
+  - name: Instaladores, pacotes e imagens de disco antigos
+    locations: *downloads
+    filters:
+      - extension: [appimage, deb, rpm, exe, msi, dmg, zst, iso, img, apk, flatpakref]
+      - lastmodified: {days: 14, mode: older}
+    actions:
+      - echo: "lixeira (instalador antigo): {path.name}"
+      - trash
+
+  - name: Documentos
+    locations: *downloads
+    filters:
+      - extension: [pdf, doc, docx, odt, rtf, txt, md, xls, xlsx, ods, csv, ppt, pptx, odp, epub]
+      - lastmodified: &velho2 {days: 2, mode: older}
+    actions:
+      - move: {dest: "~/Documentos/Downloads/", on_conflict: rename_new}
+
+  - name: Imagens
+    locations: *downloads
+    filters:
+      - extension: [jpg, jpeg, png, webp, gif, svg, heic, bmp, tif, tiff]
+      - lastmodified: *velho2
+    actions:
+      - move: {dest: "~/Imagens/Downloads/", on_conflict: rename_new}
+
+  - name: Vídeos
+    locations: *downloads
+    filters:
+      - extension: [mp4, mkv, webm, mov, avi]
+      - lastmodified: *velho2
+    actions:
+      - move: {dest: "~/Vídeos/Downloads/", on_conflict: rename_new}
+
+  - name: Áudio
+    locations: *downloads
+    filters:
+      - extension: [mp3, ogg, opus, flac, wav, m4a]
+      - lastmodified: *velho2
+    actions:
+      - move: {dest: "~/Música/Downloads/", on_conflict: rename_new}
+
+  - name: Compactados (podem ser backups; nunca vão para a lixeira automaticamente)
+    locations: *downloads
+    filters:
+      - extension: [zip, rar, 7z, tar, gz, tgz, bz2, xz]
+      - lastmodified: *velho2
+    actions:
+      - move: {dest: "~/Documentos/Downloads/Compactados/", on_conflict: rename_new}
