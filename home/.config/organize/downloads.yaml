@@ -76,3 +76,22 @@ rules:
       - lastmodified: *velho2
     actions:
       - move: {dest: "~/Documentos/Downloads/Compactados/", on_conflict: rename_new}
+
+  - name: Código e patches
+    locations: *downloads
+    filters:
+      - extension: [patch, diff, py, js, ts, tsx, jsx, java, kt, c, cpp, h, go, rs, sh, qml, sql]
+      - lastmodified: *velho2
+    actions:
+      - move: {dest: "~/Documentos/Downloads/Código/", on_conflict: rename_new}
+
+  # O Chromium salva como .org.chromium.Chromium.XXXXXX antes de renomear; quando o
+  # download é interrompido no fim, sobra o arquivo completo (PDF, imagem...) sem nome.
+  # Não são lixo: vão para uma pasta própria para revisão manual.
+  - name: Downloads do Chromium sem nome
+    locations: *downloads
+    filters:
+      - name: {startswith: ".org.chromium.Chromium"}
+      - lastmodified: *velho7
+    actions:
+      - move: {dest: "~/Documentos/Downloads/Chromium sem nome/", on_conflict: rename_new}
