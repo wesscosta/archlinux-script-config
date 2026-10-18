@@ -10,7 +10,7 @@ exigir_nao_root
 ORIGEM="$REPO_DIR/home"
 SUFIXO=".bak-$(date +%Y%m%d)"
 
-while IFS= read -r -d '' arq; do
+while IFS= read -r -d '' -u 3 arq; do
     rel="${arq#"$ORIGEM"/}"
     dest="$HOME/$rel"
 
@@ -28,6 +28,6 @@ while IFS= read -r -d '' arq; do
 
     install -D -m 644 "$arq" "$dest"
     ok "instalado: ~/$rel"
-done < <(find "$ORIGEM" -type f -print0 | sort -z)
+done 3< <(find "$ORIGEM" -type f -print0 | sort -z)
 
 info "Painel e widgets do Plasma: veja docs/kde-plasma.md"
