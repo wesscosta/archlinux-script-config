@@ -1,0 +1,10 @@
+[Unit]
+Description=Organiza ~/Downloads (regras em ~/.config/organize/downloads.yaml)
+Documentation=https://organize.readthedocs.io
+ConditionPathExists=%h/.config/organize/downloads.yaml
+
+[Service]
+Type=oneshot
+ExecStart=%h/.local/bin/organize run %h/.config/organize/downloads.yaml
+Nice=10
+IOSchedulingClass=idle

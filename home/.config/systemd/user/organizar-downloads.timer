@@ -1,0 +1,11 @@
+[Unit]
+Description=Organiza ~/Downloads uma vez por dia
+
+[Timer]
+OnCalendar=daily
+RandomizedDelaySec=30min
+# Roda na próxima inicialização se o notebook estava desligado no horário.
+Persistent=true
+
+[Install]
+WantedBy=timers.target

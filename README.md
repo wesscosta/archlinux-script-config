@@ -73,6 +73,27 @@ faz sentido para quem usa um setup parecido.
 | `sudo ./scripts/btrfs-espaco.sh`     | diagnóstico de espaço e snapshots (só leitura)               |
 | `./scripts/backup.sh`                | pacotes + configs em `~/backups/arch` (fora do repo)         |
 | `./scripts/restaurar.sh <dir>`       | restaura um backup                                           |
+| `./scripts/organizar-downloads.sh`   | simula as regras do `~/Downloads` e ativa a execução diária  |
+
+### Organização do `~/Downloads`
+
+Regras em [`home/.config/organize/downloads.yaml`](home/.config/organize/downloads.yaml), executadas
+pelo [organize](https://organize.readthedocs.io) uma vez por dia via timer do systemd de usuário.
+
+- Documentos, imagens, vídeos, áudio e compactados com mais de 2 dias vão para
+  `~/<Pasta>/Downloads/` (em conflito de nome, o novo ganha sufixo; nada é sobrescrito).
+- Vão para a **lixeira**, nunca para `rm`: downloads incompletos com mais de 7 dias, duplicados
+  exatos (fica o mais antigo) e instaladores ou imagens de disco com mais de 14 dias.
+- Compactados nunca são descartados automaticamente, porque podem ser backups.
+- Só o primeiro nível de `~/Downloads`; subpastas e arquivos sem extensão conhecida ficam onde estão.
+
+```sh
+./scripts/instalar-home.sh          # instala as regras e as unidades do systemd
+./scripts/organizar-downloads.sh    # instala o organize (pipx), simula e pede confirmação
+organize sim ~/.config/organize/downloads.yaml        # simular a qualquer momento
+journalctl --user -u organizar-downloads.service      # o que foi feito
+./scripts/organizar-downloads.sh desativar
+```
 
 ## Proteções
 
