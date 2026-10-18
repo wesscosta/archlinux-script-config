@@ -59,5 +59,6 @@ if (( mudou_grub )); then
     confirmar "grub mudou. Regenerar /boot/grub/grub.cfg?" && grub-mkconfig -o /boot/grub/grub.cfg
 fi
 
-info "Conferindo kernels em /boot:"
+info "Conferindo kernels e GRUB em /boot:"
 /usr/local/bin/verificar-kernels-boot
+/usr/local/bin/verificar-grub-efi

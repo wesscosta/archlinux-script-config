@@ -1,0 +1,22 @@
+#!/bin/sh
+# Confere se cada GRUB instalado na EFI procura seus arquivos na própria EFI.
+# Um grub-install feito com /boot desmontado grava o prefix dentro do Btrfs
+# (ex.: (,gpt2)/@/boot/grub): no boot ele cai no prompt e só segue com 'exit'.
+# Chamado pelo hook zz-verificar-grub.hook e útil para rodar à mão.
+findmnt -n -M /boot -t vfat >/dev/null 2>&1 || exit 0
+part=$(findmnt -n -o SOURCE /boot | sed 's/.*[^0-9]\([0-9][0-9]*\)$/\1/')
+esperado="(,gpt$part)/grub"
+falhas=0
+for efi in /boot/EFI/*/*.efi /boot/EFI/*/*.EFI; do
+    [ -f "$efi" ] || continue
+    prefixo=$(LC_ALL=C grep -aoE '\([^()[:space:]]*\)/[[:print:]]*grub' "$efi" | tail -1)
+    [ -n "$prefixo" ] || continue   # não é GRUB (ex.: shim, outro bootloader)
+    if [ "$prefixo" != "$esperado" ]; then
+        echo "AVISO: $efi procura o GRUB em $prefixo (esperado: $esperado)" >&2
+        falhas=1
+    fi
+done
+if [ "$falhas" -ne 0 ]; then
+    echo "      Corrija com: sudo ./scripts/reparar-grub.sh" >&2
+fi
+exit 0

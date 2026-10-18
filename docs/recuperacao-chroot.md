@@ -45,9 +45,15 @@ Kernels em uso: `linux-zen` (principal), `linux-lts` (fallback, mantenha sempre)
 
 ```sh
 grub-mkconfig -o /boot/grub/grub.cfg
-# Só se a entrada da EFI também sumiu:
-grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB
+# Se a entrada da EFI sumiu ou o boot para no prompt do GRUB (só segue com 'exit'):
+grub-install --target=x86_64-efi --efi-directory=/boot --boot-directory=/boot --bootloader-id=GRUB
+grub-install --target=x86_64-efi --efi-directory=/boot --boot-directory=/boot --removable
 ```
+
+Rode o `grub-install` **sempre com a EFI montada em `/boot`**. Sem ela, o GRUB grava o caminho dos
+seus arquivos dentro do Btrfs (`(,gpt2)/@/boot/grub`) e o boot passa a parar no prompt. O segundo
+comando atualiza o fallback `EFI/BOOT/BOOTX64.EFI` para a mesma versão dos módulos. Fora do chroot,
+`sudo ./scripts/reparar-grub.sh` faz os dois e confere o resultado.
 
 ## 5. Sair
 
