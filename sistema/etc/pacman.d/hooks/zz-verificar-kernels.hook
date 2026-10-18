@@ -1,0 +1,14 @@
+# Depois de mexer em kernels, avisa se algum ficou sem vmlinuz/initramfs/preset em /boot.
+[Trigger]
+Operation = Install
+Operation = Upgrade
+Operation = Remove
+Type = Path
+Target = usr/lib/modules/*/vmlinuz
+Target = usr/lib/initcpio/*
+Target = boot/*
+
+[Action]
+Description = Verificando kernels e initramfs em /boot...
+When = PostTransaction
+Exec = /usr/local/bin/verificar-kernels-boot

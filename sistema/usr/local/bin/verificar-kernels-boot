@@ -1,0 +1,18 @@
+#!/bin/sh
+# Confere se cada kernel instalado tem vmlinuz, initramfs e preset do mkinitcpio.
+# Chamado pelo hook zz-verificar-kernels.hook e útil para rodar à mão.
+falhas=0
+for pkgbase in /usr/lib/modules/*/pkgbase; do
+    [ -f "$pkgbase" ] || continue
+    k=$(cat "$pkgbase")
+    for f in "/boot/vmlinuz-$k" "/boot/initramfs-$k.img" "/etc/mkinitcpio.d/$k.preset"; do
+        if [ ! -e "$f" ]; then
+            echo "AVISO: kernel '$k' instalado, mas falta $f" >&2
+            falhas=1
+        fi
+    done
+done
+if [ "$falhas" -ne 0 ]; then
+    echo "      Corrija com: pacman -S <kernel> && mkinitcpio -P && grub-mkconfig -o /boot/grub/grub.cfg" >&2
+fi
+exit 0

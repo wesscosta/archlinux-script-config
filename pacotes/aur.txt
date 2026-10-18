@@ -1,0 +1,5 @@
+# AUR (via yay)
+yay
+visual-studio-code-bin
+brave-bin
+postman-bin

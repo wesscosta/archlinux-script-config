@@ -1,0 +1,14 @@
+# Bloqueia qualquer transação do pacman se a ESP não estiver montada em /boot.
+# Roda antes do snap-pac (05-snap-pac-pre.hook), então nem cria snapshot inútil.
+[Trigger]
+Operation = Install
+Operation = Upgrade
+Operation = Remove
+Type = Package
+Target = *
+
+[Action]
+Description = Verificando se a partição EFI está montada em /boot...
+When = PreTransaction
+Exec = /usr/local/bin/checar-boot-montado
+AbortOnFail

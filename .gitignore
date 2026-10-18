@@ -1,0 +1,6 @@
+# Backups gerados por scripts/backup.sh contêm dados da máquina: ficam em ~/backups/arch
+backup_arch_*/
+
+# Cópias criadas pelos instaladores
+*.bak
+*.bak-*
